@@ -52,7 +52,7 @@ kind: Deployment
 metadata: 
   name: ktcloud-green
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       color: green
