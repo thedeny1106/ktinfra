@@ -1,0 +1,76 @@
+---
+# Service (LB)
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ktcloud-lb
+  # labels:
+  # namespace:
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+#      protocol: tcp
+    targetPort: 80
+#      nodePort:
+  selector:
+    color: green
+
+---
+# deployment (blue)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ktcloud-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      color: blue
+  template: # pod start
+    metadata:
+      labels:
+        color: blue
+    spec:
+      containers: # container start
+        - name: ktcloudctn-blue
+          image: brian24/ktcloudinfra:blue
+          resources: # limits(max) & requests(min)
+            limits:
+              cpu: "500m" # 0.5 vCPU
+              memory: "64Mi" # 64MB
+          ports:
+            - containerPort: 80
+
+---
+#deployment(green)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: ktcloud-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      color: green
+  template: # pod start
+    metadata: 
+      labels:  
+        color: green
+    spec:
+      containers: # container start
+        - name: ktcloudctn-green
+          image: brian24/ktcloudinfra:green
+          resources: # limits(max) & requests(min)
+            limits: 
+              cpu: "500m" # 0.5 vCPU
+              memory: "64Mi" # 64MB
+          ports:
+            - containerPort: 80 
+
+
+        
+
